@@ -1,0 +1,11 @@
+{
+    "app_name": "Job Application Agent",
+    "host": "127.0.0.1",
+    "port": 5000,
+    "debug": false,
+    "data_dir": "/Users/hr/my_files/agent/apply_agent/data",
+    "openai_api_key": "",
+    "selenium_driver_path": "",
+    "max_applications_per_day": 10,
+    "user_profile_path": "/Users/hr/my_files/agent/apply_agent/data/user_profile.json"
+}

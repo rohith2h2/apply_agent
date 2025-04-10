@@ -1,0 +1,30 @@
+# Web Interactions
+selenium==4.15.2
+playwright==1.40.0
+beautifulsoup4==4.12.2
+
+# AI/ML
+openai==1.3.0
+scikit-learn==1.3.2
+numpy==1.26.2
+pandas==2.1.3
+
+# Natural Language Processing
+spacy==3.7.2
+transformers==4.35.2
+
+# Data Storage
+sqlalchemy==2.0.23
+python-dotenv==1.0.0
+
+# Web Development (for UI)
+flask==3.0.0
+flask-cors==4.0.0
+
+# Testing
+pytest==7.4.3
+
+# Utilities
+tqdm==4.66.1
+requests==2.31.0
+pydantic==2.5.1 

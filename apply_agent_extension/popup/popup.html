@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Application Agent</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        <header class="popup-header">
+            <div class="header-content">
+                <h1>Job Application Agent</h1>
+                <span id="status-badge" class="badge">Inactive</span>
+            </div>
+        </header>
+
+        <div class="popup-content">
+            <!-- Alert for form detection -->
+            <div id="detection-alert" class="alert alert-info" style="display: none;">
+                <span class="alert-icon">ℹ️</span>
+                <span class="alert-message">Form detected on this page!</span>
+            </div>
+
+            <!-- Learning Section (Default View) -->
+            <section id="learning-section">
+                <div class="section-title">Start Learning</div>
+                <p class="description">Begin learning how you fill out job applications to create an autofill profile.</p>
+                <button id="start-learning-btn" class="btn btn-primary">Start Learning Mode</button>
+            </section>
+
+            <!-- Active Learning Section (When Learning) -->
+            <section id="activelearning-section" style="display: none;">
+                <div class="section-title">Learning in Progress</div>
+                <div id="recording-indicator" class="recording">
+                    <span class="recording-dot"></span>
+                    <span>Recording your actions</span>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Fields Captured:</span>
+                        <span id="field-count" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Forms Captured:</span>
+                        <span id="form-count" class="stat-value">0</span>
+                    </div>
+                </div>
+                <button id="stop-learning-btn" class="btn btn-danger">Stop Learning</button>
+            </section>
+
+            <!-- Controls Section -->
+            <section class="action-section">
+                <div class="section-title">Actions</div>
+                <div class="button-group">
+                    <button id="start-autofill-btn" class="btn btn-secondary" disabled>Start AutoFill</button>
+                    <button id="view-data-btn" class="btn btn-outline">View Saved Data</button>
+                </div>
+                
+                <!-- Export Data Section -->
+                <div class="export-section">
+                    <button id="export-data-btn" class="btn btn-outline">Export Collected Data</button>
+                </div>
+            </section>
+        </div>
+
+        <footer class="popup-footer">
+            <button id="settings-btn" class="btn btn-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                Settings
+            </button>
+            <div class="version">v1.0.0</div>
+        </footer>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 

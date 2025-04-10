@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Job Application Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 150px;
+        }
+        .checkbox-group {
+            margin-top: 5px;
+        }
+        .checkbox-label {
+            font-weight: normal;
+            display: inline-block;
+            margin-right: 15px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .form-header {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Software Developer Application</h1>
+    
+    <div class="form-header">
+        <p>Thank you for your interest in joining our team. Please fill out the form below to apply for the Software Developer position.</p>
+    </div>
+    
+    <form id="job-application-form" class="application-form">
+        <!-- Personal Information -->
+        <h2>Personal Information</h2>
+        
+        <div class="form-group">
+            <label for="full-name">Full Name:</label>
+            <input type="text" id="full-name" name="full_name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="location">Current Location:</label>
+            <input type="text" id="location" name="location" required>
+        </div>
+        
+        <!-- Experience -->
+        <h2>Experience</h2>
+        
+        <div class="form-group">
+            <label for="years-experience">Years of Experience:</label>
+            <select id="years-experience" name="years_experience" required>
+                <option value="">Please select</option>
+                <option value="0-1">Less than 1 year</option>
+                <option value="1-3">1-3 years</option>
+                <option value="3-5">3-5 years</option>
+                <option value="5-10">5-10 years</option>
+                <option value="10+">More than 10 years</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="current-company">Current/Most Recent Company:</label>
+            <input type="text" id="current-company" name="current_company">
+        </div>
+        
+        <div class="form-group">
+            <label for="current-position">Current/Most Recent Position:</label>
+            <input type="text" id="current-position" name="current_position">
+        </div>
+        
+        <!-- Skills -->
+        <h2>Skills</h2>
+        
+        <div class="form-group">
+            <label>Programming Languages:</label>
+            <div class="checkbox-group">
+                <input type="checkbox" id="javascript" name="skills[]" value="JavaScript">
+                <label class="checkbox-label" for="javascript">JavaScript</label>
+                
+                <input type="checkbox" id="python" name="skills[]" value="Python">
+                <label class="checkbox-label" for="python">Python</label>
+                
+                <input type="checkbox" id="java" name="skills[]" value="Java">
+                <label class="checkbox-label" for="java">Java</label>
+                
+                <input type="checkbox" id="csharp" name="skills[]" value="C#">
+                <label class="checkbox-label" for="csharp">C#</label>
+                
+                <input type="checkbox" id="cplusplus" name="skills[]" value="C++">
+                <label class="checkbox-label" for="cplusplus">C++</label>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="other-skills">Other Skills or Technologies:</label>
+            <textarea id="other-skills" name="other_skills"></textarea>
+        </div>
+        
+        <!-- Additional Information -->
+        <h2>Additional Information</h2>
+        
+        <div class="form-group">
+            <label for="resume">LinkedIn Profile URL:</label>
+            <input type="text" id="linkedin" name="linkedin">
+        </div>
+        
+        <div class="form-group">
+            <label for="portfolio">GitHub/Portfolio URL:</label>
+            <input type="text" id="portfolio" name="portfolio">
+        </div>
+        
+        <div class="form-group">
+            <label for="cover-letter">Cover Letter / Introduction:</label>
+            <textarea id="cover-letter" name="cover_letter" placeholder="Tell us why you're interested in this position and what makes you a great candidate..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="salary">Expected Salary (USD):</label>
+            <input type="text" id="salary" name="salary">
+        </div>
+        
+        <div class="form-group">
+            <label for="start-date">Earliest Start Date:</label>
+            <input type="text" id="start-date" name="start_date" placeholder="e.g., Immediately, 2 weeks notice, etc.">
+        </div>
+        
+        <div class="form-group">
+            <label for="referral">How did you hear about this position?</label>
+            <select id="referral" name="referral">
+                <option value="">Please select</option>
+                <option value="job-board">Job Board</option>
+                <option value="company-website">Company Website</option>
+                <option value="referral">Employee Referral</option>
+                <option value="social-media">Social Media</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        
+        <button type="submit">Submit Application</button>
+    </form>
+</body>
+</html> 

@@ -1,0 +1,529 @@
+{% extends "base.html" %}
+
+{% block title %}Learning Mode - Job Application Agent{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h1 class="mb-4">Learning Mode</h1>
+        <p class="lead mb-4">Train your agent by letting it observe how you fill out job applications. The agent will learn your style and preferences to automatically apply for jobs on your behalf.</p>
+        
+        <div class="alert alert-info">
+            <div class="d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-info-circle-fill me-2" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                <div>
+                    <strong>How it works:</strong> Apply for 2-3 jobs normally while the agent watches and learns. After that, your agent will be ready to apply for similar jobs on your behalf.
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Start New Learning Session</h5>
+            </div>
+            <div class="card-body">
+                <form id="start-learning-form" data-ajax="true" action="/api/start-learning" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="company" class="form-label">Company Name*</label>
+                            <input type="text" class="form-control" id="company" name="company" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="job_title" class="form-label">Job Title*</label>
+                            <input type="text" class="form-control" id="job_title" name="job_title" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="application_url" class="form-label">Application URL*</label>
+                            <input type="url" class="form-control" id="application_url" name="application_url" required placeholder="https://company.com/careers/job123">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="job_description" class="form-label">Job Description</label>
+                            <textarea class="form-control" id="job_description" name="job_description" rows="4" placeholder="Paste the job description here"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="consent" name="consent" required>
+                                <label class="form-check-label" for="consent">
+                                    I understand that during learning mode, the agent will record the information I enter into the application form to learn my application style.
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-record-circle me-1" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+                            </svg>
+                            Start Learning Session
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="card mb-4 shadow-sm d-none" id="active-session-card">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <span class="recording-indicator"></span>
+                    Active Learning Session
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <p class="mb-1"><strong>Company:</strong> <span id="session-company"></span></p>
+                    <p class="mb-1"><strong>Job Title:</strong> <span id="session-job-title"></span></p>
+                    <p class="mb-0"><strong>Started:</strong> <span id="session-start-time"></span></p>
+                </div>
+                <div class="alert alert-warning mb-4">
+                    <div class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill me-2" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                        </svg>
+                        <div>
+                            <strong>Learning in progress!</strong> Fill out the application as you normally would. The agent is watching and learning.
+                        </div>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="button" class="btn btn-outline-secondary me-md-2" id="cancel-session-btn">Cancel Session</button>
+                    <button type="button" class="btn btn-success" id="finish-session-btn">Finish Session</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Past Learning Sessions</h5>
+            </div>
+            <div class="card-body">
+                <div id="no-sessions-message" class="text-center py-4">
+                    <p class="text-muted mb-0">No learning sessions recorded yet. Start a new session to train your agent.</p>
+                </div>
+                <div id="sessions-list" class="d-none">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Company</th>
+                                    <th>Job Title</th>
+                                    <th>Fields Captured</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessions-table-body">
+                                <!-- Sessions will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0">Agent Learning Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="progress" style="height: 25px;">
+                        <div id="learning-progress" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Sessions Completed:</strong> <span id="sessions-completed">0</span>/3</p>
+                        <p><strong>Fields Learned:</strong> <span id="fields-learned">0</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Agent Status:</strong> <span id="agent-status">Not Trained</span></p>
+                        <p><strong>Last Trained:</strong> <span id="last-trained">Never</span></p>
+                    </div>
+                </div>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                    <button type="button" class="btn btn-primary" id="analyze-learning-btn" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill me-1" viewBox="0 0 16 16">
+                            <path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5z"/>
+                        </svg>
+                        Analyze & Train Agent
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Session Finish Modal -->
+<div class="modal fade" id="finishSessionModal" tabindex="-1" aria-labelledby="finishSessionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="finishSessionModalLabel">Finish Learning Session</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="finish-session-form">
+                    <div class="mb-3">
+                        <label for="session-notes" class="form-label">Session Notes (optional)</label>
+                        <textarea class="form-control" id="session-notes" rows="4" placeholder="Add any notes about this application that might be helpful for the agent to know"></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="session-successful" checked>
+                        <label class="form-check-label" for="session-successful">
+                            I successfully completed this application
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-finish-btn">Finish Session</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Variables to store session state
+        let activeSession = false;
+        let sessionId = null;
+        
+        // DOM Elements
+        const startLearningForm = document.getElementById('start-learning-form');
+        const activeSessionCard = document.getElementById('active-session-card');
+        const sessionCompanySpan = document.getElementById('session-company');
+        const sessionJobTitleSpan = document.getElementById('session-job-title');
+        const sessionStartTimeSpan = document.getElementById('session-start-time');
+        const cancelSessionBtn = document.getElementById('cancel-session-btn');
+        const finishSessionBtn = document.getElementById('finish-session-btn');
+        const finishSessionModal = new bootstrap.Modal(document.getElementById('finishSessionModal'));
+        const confirmFinishBtn = document.getElementById('confirm-finish-btn');
+        const sessionNotes = document.getElementById('session-notes');
+        const sessionSuccessful = document.getElementById('session-successful');
+        
+        // Learning progress elements
+        const learningProgress = document.getElementById('learning-progress');
+        const sessionsCompleted = document.getElementById('sessions-completed');
+        const fieldsLearned = document.getElementById('fields-learned');
+        const agentStatus = document.getElementById('agent-status');
+        const lastTrained = document.getElementById('last-trained');
+        const analyzeLearningBtn = document.getElementById('analyze-learning-btn');
+        
+        // Sessions list elements
+        const noSessionsMessage = document.getElementById('no-sessions-message');
+        const sessionsList = document.getElementById('sessions-list');
+        const sessionsTableBody = document.getElementById('sessions-table-body');
+        
+        // Load previous sessions and learning status
+        loadLearningSessions();
+        updateLearningStatus();
+        
+        // Check if there's an active session
+        checkActiveSession();
+        
+        // Start learning form submission
+        startLearningForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            if (!this.checkValidity()) {
+                e.stopPropagation();
+                this.classList.add('was-validated');
+                return;
+            }
+            
+            // Get form data
+            const formData = new FormData(this);
+            
+            // API call to start learning session
+            fetch('/api/start-learning', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showNotification('Learning session started successfully!', 'success');
+                    // Update session state
+                    activeSession = true;
+                    sessionId = data.session_id;
+                    
+                    // Update UI
+                    sessionCompanySpan.textContent = formData.get('company');
+                    sessionJobTitleSpan.textContent = formData.get('job_title');
+                    sessionStartTimeSpan.textContent = new Date().toLocaleString();
+                    
+                    // Show active session card
+                    activeSessionCard.classList.remove('d-none');
+                    
+                    // Reset and hide form
+                    startLearningForm.reset();
+                    startLearningForm.closest('.card').classList.add('d-none');
+                    
+                    // Open application in new tab
+                    window.open(formData.get('application_url'), '_blank');
+                } else {
+                    showNotification('Error starting learning session: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+            });
+        });
+        
+        // Cancel session button
+        cancelSessionBtn.addEventListener('click', function() {
+            if (confirm('Are you sure you want to cancel this learning session? All captured data will be discarded.')) {
+                // API call to cancel session
+                fetch('/api/cancel-learning', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ session_id: sessionId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showNotification('Learning session cancelled.', 'info');
+                        resetSessionState();
+                    } else {
+                        showNotification('Error cancelling session: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                });
+            }
+        });
+        
+        // Finish session button
+        finishSessionBtn.addEventListener('click', function() {
+            // Show finish session modal
+            finishSessionModal.show();
+        });
+        
+        // Confirm finish button in modal
+        confirmFinishBtn.addEventListener('click', function() {
+            // API call to finish session
+            fetch('/api/finish-learning', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    session_id: sessionId,
+                    notes: sessionNotes.value,
+                    successful: sessionSuccessful.checked
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showNotification('Learning session completed successfully!', 'success');
+                    resetSessionState();
+                    
+                    // Update sessions list and learning status
+                    loadLearningSessions();
+                    updateLearningStatus();
+                    
+                    // Close modal
+                    finishSessionModal.hide();
+                } else {
+                    showNotification('Error finishing session: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+                finishSessionModal.hide();
+            });
+        });
+        
+        // Analyze learning button
+        analyzeLearningBtn.addEventListener('click', function() {
+            if (confirm('Are you ready to train your agent? This will analyze all your completed learning sessions.')) {
+                showNotification('Training in progress...', 'info');
+                this.disabled = true;
+                this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Training...';
+                
+                // API call to analyze and train agent
+                fetch('/api/analyze-learning', {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showNotification('Agent training completed successfully!', 'success');
+                        updateLearningStatus();
+                    } else {
+                        showNotification('Error training agent: ' + data.message, 'error');
+                    }
+                    
+                    this.disabled = false;
+                    this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill me-1" viewBox="0 0 16 16"><path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5z"/></svg> Analyze & Train Agent';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('An error occurred. Please try again.', 'error');
+                    
+                    this.disabled = false;
+                    this.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill me-1" viewBox="0 0 16 16"><path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5z"/></svg> Analyze & Train Agent';
+                });
+            }
+        });
+        
+        // Function to check if there's an active session
+        function checkActiveSession() {
+            fetch('/api/active-learning-session')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success' && data.active_session) {
+                    // Update session state
+                    activeSession = true;
+                    sessionId = data.session_id;
+                    
+                    // Update UI
+                    sessionCompanySpan.textContent = data.company;
+                    sessionJobTitleSpan.textContent = data.job_title;
+                    sessionStartTimeSpan.textContent = new Date(data.start_time).toLocaleString();
+                    
+                    // Show active session card and hide form
+                    activeSessionCard.classList.remove('d-none');
+                    startLearningForm.closest('.card').classList.add('d-none');
+                }
+            })
+            .catch(error => {
+                console.error('Error checking active session:', error);
+            });
+        }
+        
+        // Function to load learning sessions
+        function loadLearningSessions() {
+            fetch('/api/learning-sessions')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (data.sessions && data.sessions.length > 0) {
+                        // Hide no sessions message and show list
+                        noSessionsMessage.classList.add('d-none');
+                        sessionsList.classList.remove('d-none');
+                        
+                        // Clear existing sessions
+                        sessionsTableBody.innerHTML = '';
+                        
+                        // Add sessions to table
+                        data.sessions.forEach(session => {
+                            const row = document.createElement('tr');
+                            
+                            // Create date cell
+                            const dateCell = document.createElement('td');
+                            dateCell.textContent = new Date(session.date).toLocaleDateString();
+                            
+                            // Create company cell
+                            const companyCell = document.createElement('td');
+                            companyCell.textContent = session.company;
+                            
+                            // Create job title cell
+                            const jobTitleCell = document.createElement('td');
+                            jobTitleCell.textContent = session.job_title;
+                            
+                            // Create fields cell
+                            const fieldsCell = document.createElement('td');
+                            fieldsCell.textContent = session.fields_count;
+                            
+                            // Create actions cell
+                            const actionsCell = document.createElement('td');
+                            const viewButton = document.createElement('button');
+                            viewButton.className = 'btn btn-sm btn-outline-primary';
+                            viewButton.textContent = 'View Details';
+                            viewButton.addEventListener('click', function() {
+                                window.location.href = `/learning/session/${session.session_id}`;
+                            });
+                            actionsCell.appendChild(viewButton);
+                            
+                            // Add cells to row
+                            row.appendChild(dateCell);
+                            row.appendChild(companyCell);
+                            row.appendChild(jobTitleCell);
+                            row.appendChild(fieldsCell);
+                            row.appendChild(actionsCell);
+                            
+                            // Add row to table
+                            sessionsTableBody.appendChild(row);
+                        });
+                    } else {
+                        // Show no sessions message and hide list
+                        noSessionsMessage.classList.remove('d-none');
+                        sessionsList.classList.add('d-none');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error loading learning sessions:', error);
+            });
+        }
+        
+        // Function to update learning status
+        function updateLearningStatus() {
+            fetch('/api/learning-status')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update sessions completed
+                    sessionsCompleted.textContent = data.sessions_completed;
+                    
+                    // Update fields learned
+                    fieldsLearned.textContent = data.fields_learned;
+                    
+                    // Update progress bar
+                    const progress = Math.min(Math.round((data.sessions_completed / 3) * 100), 100);
+                    learningProgress.style.width = `${progress}%`;
+                    learningProgress.textContent = `${progress}%`;
+                    learningProgress.setAttribute('aria-valuenow', progress);
+                    
+                    // Update agent status
+                    agentStatus.textContent = data.agent_status;
+                    
+                    // Update last trained
+                    lastTrained.textContent = data.last_trained ? new Date(data.last_trained).toLocaleString() : 'Never';
+                    
+                    // Enable/disable analyze button based on completion status
+                    analyzeLearningBtn.disabled = data.sessions_completed < 1;
+                }
+            })
+            .catch(error => {
+                console.error('Error updating learning status:', error);
+            });
+        }
+        
+        // Function to reset session state
+        function resetSessionState() {
+            activeSession = false;
+            sessionId = null;
+            
+            // Hide active session card and show form
+            activeSessionCard.classList.add('d-none');
+            startLearningForm.closest('.card').classList.remove('d-none');
+            
+            // Reset session notes and successful checkbox
+            sessionNotes.value = '';
+            sessionSuccessful.checked = true;
+        }
+    });
+</script>
+{% endblock %} 

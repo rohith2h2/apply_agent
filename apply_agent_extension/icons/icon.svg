@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="#4a6cf7" />
+  
+  <!-- Document icon -->
+  <rect x="40" y="30" width="48" height="58" rx="4" fill="white" />
+  
+  <!-- Form lines -->
+  <line x1="48" y1="45" x2="80" y2="45" stroke="#4a6cf7" stroke-width="3" />
+  <line x1="48" y1="55" x2="80" y2="55" stroke="#4a6cf7" stroke-width="3" />
+  <line x1="48" y1="65" x2="80" y2="65" stroke="#4a6cf7" stroke-width="3" />
+  <line x1="48" y1="75" x2="65" y2="75" stroke="#4a6cf7" stroke-width="3" />
+  
+  <!-- Pencil -->
+  <path d="M75,60 L90,75 L95,70 L80,55 Z" fill="#e74c3c" />
+  <rect x="75" y="60" width="3" height="15" transform="rotate(-45 75 60)" fill="#c0392b" />
+  <polygon points="90,75 92,83 84,81" fill="#e74c3c" />
+</svg> 

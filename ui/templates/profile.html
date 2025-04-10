@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Job Application Agent{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h1 class="mb-4">Your Profile</h1>
+        <p class="lead mb-4">Complete your profile to help the agent automatically fill job applications on your behalf.</p>
+        
+        <form method="POST" action="/profile">
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="full_name" class="form-label">Full Name*</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address*</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" name="phone">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="linkedin" class="form-label">LinkedIn Profile</label>
+                            <input type="url" class="form-control" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="city" class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="state" class="form-label">State/Province</label>
+                            <input type="text" class="form-control" id="state" name="state">
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="zip_code" class="form-label">ZIP/Postal Code</label>
+                            <input type="text" class="form-control" id="zip_code" name="zip_code">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Professional Summary</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="summary" class="form-label">Summary/Objective Statement</label>
+                        <textarea class="form-control" id="summary" name="summary" rows="4" placeholder="Write a brief summary of your professional background and goals"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Work Experience</h5>
+                    <button type="button" class="btn btn-sm btn-light" id="add-experience">Add Experience</button>
+                </div>
+                <div class="card-body" id="experience-container">
+                    <div class="experience-entry border rounded p-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Company*</label>
+                                <input type="text" class="form-control" name="experience[0][company]" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Job Title*</label>
+                                <input type="text" class="form-control" name="experience[0][title]" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 mb-3">
+                                <label class="form-label">Location</label>
+                                <input type="text" class="form-control" name="experience[0][location]">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Start Date*</label>
+                                <input type="month" class="form-control" name="experience[0][start_date]" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">End Date</label>
+                                <input type="month" class="form-control" name="experience[0][end_date]">
+                            </div>
+                            <div class="col-md-1 mb-3 d-flex align-items-end">
+                                <div class="form-check">
+                                    <input class="form-check-input current-job" type="checkbox" name="experience[0][current]" id="current-job-0">
+                                    <label class="form-check-label" for="current-job-0">Current</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Description*</label>
+                                <textarea class="form-control" name="experience[0][description]" rows="3" required placeholder="Describe your responsibilities and achievements"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-entry d-none">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Education</h5>
+                    <button type="button" class="btn btn-sm btn-light" id="add-education">Add Education</button>
+                </div>
+                <div class="card-body" id="education-container">
+                    <div class="education-entry border rounded p-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Institution*</label>
+                                <input type="text" class="form-control" name="education[0][institution]" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Degree*</label>
+                                <input type="text" class="form-control" name="education[0][degree]" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Field of Study*</label>
+                                <input type="text" class="form-control" name="education[0][field_of_study]" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Start Date*</label>
+                                <input type="month" class="form-control" name="education[0][start_date]" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">End Date</label>
+                                <input type="month" class="form-control" name="education[0][end_date]">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">GPA</label>
+                                <input type="number" step="0.01" min="0" max="4.0" class="form-control" name="education[0][gpa]">
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="education[0][description]" rows="2" placeholder="Additional information about your education"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-entry d-none">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Skills</h5>
+                    <button type="button" class="btn btn-sm btn-light" id="add-skill">Add Skill</button>
+                </div>
+                <div class="card-body" id="skills-container">
+                    <div class="skill-entry border rounded p-3 mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Skill*</label>
+                                <input type="text" class="form-control" name="skills[0][name]" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Level</label>
+                                <select class="form-select" name="skills[0][level]">
+                                    <option value="">Select Level</option>
+                                    <option value="Beginner">Beginner</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Expert">Expert</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label class="form-label">Years of Experience</label>
+                                <input type="number" min="0" class="form-control" name="skills[0][years]">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger remove-entry d-none">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Job Preferences</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="desired_role" class="form-label">Desired Role</label>
+                            <input type="text" class="form-control" id="desired_role" name="desired_role">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="remote_preference" class="form-label">Remote Preference</label>
+                            <select class="form-select" id="remote_preference" name="remote_preference">
+                                <option value="">Select Preference</option>
+                                <option value="Remote">Remote Only</option>
+                                <option value="Hybrid">Hybrid</option>
+                                <option value="On-site">On-site</option>
+                                <option value="Flexible">Flexible</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="desired_industry" class="form-label">Desired Industries</label>
+                            <input type="text" class="form-control" id="desired_industry" name="desired_industry" placeholder="Separate multiple industries with commas">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="desired_location" class="form-label">Desired Locations</label>
+                            <input type="text" class="form-control" id="desired_location" name="desired_location" placeholder="Separate multiple locations with commas">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="salary_expectation" class="form-label">Salary Expectations</label>
+                            <input type="text" class="form-control" id="salary_expectation" name="salary_expectation" placeholder="e.g., $60,000 - $80,000 per year">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-5">
+                <button type="reset" class="btn btn-outline-secondary me-md-2">Reset</button>
+                <button type="submit" class="btn btn-primary">Save Profile</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Handle "Current Job" checkbox
+        document.querySelectorAll('.current-job').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const endDateInput = this.closest('.experience-entry').querySelector('[name$="[end_date]"]');
+                if (this.checked) {
+                    endDateInput.value = '';
+                    endDateInput.disabled = true;
+                } else {
+                    endDateInput.disabled = false;
+                }
+            });
+        });
+
+        // Add experience entry
+        document.getElementById('add-experience').addEventListener('click', function() {
+            const container = document.getElementById('experience-container');
+            const entries = container.querySelectorAll('.experience-entry');
+            const newIndex = entries.length;
+            
+            const template = entries[0].cloneNode(true);
+            template.querySelectorAll('input, textarea, select').forEach(function(input) {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace('[0]', `[${newIndex}]`));
+                    input.value = '';
+                }
+                
+                if (input.type === 'checkbox') {
+                    input.checked = false;
+                    input.id = input.id.replace('-0', `-${newIndex}`);
+                }
+            });
+            
+            template.querySelectorAll('label[for]').forEach(function(label) {
+                const forAttr = label.getAttribute('for');
+                if (forAttr) {
+                    label.setAttribute('for', forAttr.replace('-0', `-${newIndex}`));
+                }
+            });
+            
+            template.querySelector('.remove-entry').classList.remove('d-none');
+            container.appendChild(template);
+            
+            // Re-attach event listeners for the new entry
+            setupRemoveButtons();
+            setupCurrentJobCheckboxes();
+        });
+
+        // Add education entry
+        document.getElementById('add-education').addEventListener('click', function() {
+            const container = document.getElementById('education-container');
+            const entries = container.querySelectorAll('.education-entry');
+            const newIndex = entries.length;
+            
+            const template = entries[0].cloneNode(true);
+            template.querySelectorAll('input, textarea, select').forEach(function(input) {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace('[0]', `[${newIndex}]`));
+                    input.value = '';
+                }
+            });
+            
+            template.querySelector('.remove-entry').classList.remove('d-none');
+            container.appendChild(template);
+            
+            // Re-attach event listeners for the new entry
+            setupRemoveButtons();
+        });
+
+        // Add skill entry
+        document.getElementById('add-skill').addEventListener('click', function() {
+            const container = document.getElementById('skills-container');
+            const entries = container.querySelectorAll('.skill-entry');
+            const newIndex = entries.length;
+            
+            const template = entries[0].cloneNode(true);
+            template.querySelectorAll('input, select').forEach(function(input) {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace('[0]', `[${newIndex}]`));
+                    input.value = '';
+                }
+            });
+            
+            template.querySelector('.remove-entry').classList.remove('d-none');
+            container.appendChild(template);
+            
+            // Re-attach event listeners for the new entry
+            setupRemoveButtons();
+        });
+
+        // Setup remove buttons
+        function setupRemoveButtons() {
+            document.querySelectorAll('.remove-entry').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to remove this entry?')) {
+                        this.closest('.education-entry, .experience-entry, .skill-entry').remove();
+                    }
+                });
+            });
+        }
+
+        // Setup current job checkboxes
+        function setupCurrentJobCheckboxes() {
+            document.querySelectorAll('.current-job').forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    const endDateInput = this.closest('.experience-entry').querySelector('[name$="[end_date]"]');
+                    if (this.checked) {
+                        endDateInput.value = '';
+                        endDateInput.disabled = true;
+                    } else {
+                        endDateInput.disabled = false;
+                    }
+                });
+            });
+        }
+
+        // Initial setup
+        setupRemoveButtons();
+        setupCurrentJobCheckboxes();
+    });
+</script>
+{% endblock %} 
